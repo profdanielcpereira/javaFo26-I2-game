@@ -6,11 +6,12 @@ public class Jogador extends Actor {
     //ATRIBUTOS
     int vidas;
     int velocidade;
-    String imagemBaixo;
-    String imagemCima;
-    String imagemDireita;
-    String imagemEsquerda;
     int estamina;
+
+    private int contadorFrames = 0;
+    private int frameAtual = 1;
+
+    private String ultimaDirecao = "baixo";
 
     //CONSTRUTOR
     public Jogador(){
@@ -32,27 +33,53 @@ public class Jogador extends Actor {
         movimentar();
     }
 
-    public void movimentar(){
-        if(Greenfoot.isKeyDown("right")){
-            //Andar para a direita:
-            setLocation(getX()+velocidade, getY());
-            setImage(imagemDireita);
+        public void movimentar(){
+        boolean isAndando = false;
+        String direcao = "";
+
+
+        if (Greenfoot.isKeyDown("w")) {
+            setLocation(getX(), getY() - velocidade);
+            isAndando = true;
+            direcao = "cima";
         }
-        if(Greenfoot.isKeyDown("left")){
-            //Andar para a esquerda:
-            setLocation(getX()-velocidade, getY());
-            setImage(imagemEsquerda);
+        if (Greenfoot.isKeyDown("a")) {
+            setLocation(getX() - velocidade, getY());
+            isAndando = true;
+            direcao = "esquerda";
         }
-        if(Greenfoot.isKeyDown("up")){
-            //Andar para a cima:
-            setLocation(getX(), getY()-velocidade);
-            setImage(imagemCima);
+        if (Greenfoot.isKeyDown("s")) {
+            setLocation(getX(), getY() + velocidade);
+            isAndando = true;
+            direcao = "baixo";
         }
-        if(Greenfoot.isKeyDown("down")){
-            //Andar para a baixo:
-            setLocation(getX(), getY()+velocidade);
-            setImage(imagemBaixo);
+        if (Greenfoot.isKeyDown("d")) {
+            setLocation(getX() + velocidade, getY());
+            isAndando = true;
+            direcao = "direita";
         }
+        if (isAndando) {
+            ultimaDirecao = direcao; // Salva a direção atual
+            animar(direcao);
+        } else {
+            setImage("imagens/jogadores/Jogador1/Jogador_" + ultimaDirecao + "_1.png");
+        }
+    }
+
+    public  void animar(String direcao){
+    contadorFrames++;
+
+        int dalayAnimacao = 5;
+        if (contadorFrames >= dalayAnimacao){
+        contadorFrames = 0;
+
+        frameAtual = (frameAtual %4) + 1;
+
+        String nomeImagem = "imagens/jogadores/Jogador1/Jogador_" + direcao + "_" + frameAtual + ".png";
+
+        setImage(nomeImagem);
+    }
+
     }
 
     public void coletarMoedas(){
