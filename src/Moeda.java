@@ -27,6 +27,7 @@ public class Moeda extends Actor {
         int y = Greenfoot.getRandomNumber(700);
         mundo.addObject(this,x,y);
     }
+
     public void despawnar(){
         this.tempo --;
         if(tempo == 0){

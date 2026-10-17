@@ -11,6 +11,9 @@ public class Jogador extends Actor {
     String imagemDireita;
     String imagemEsquerda;
     int estamina;
+    int pontos;
+    boolean sofrendoDano = false;
+    int tempoDano = 10000;
 
     //CONSTRUTOR
     public Jogador(){
@@ -19,10 +22,12 @@ public class Jogador extends Actor {
         this.vidas = vidas;
         this.velocidade = velocidade;
         this.estamina = estamina;
-        this.imagemBaixo = "imagens/jogadores/Jogador1/Jogador_baixo_1.png";
-        this.imagemCima = "imagens/jogadores/Jogador1/Jogador_cima_1.png";
-        this.imagemEsquerda = "imagens/jogadores/Jogador1/Jogador_esquerda_1.png";
-        this.imagemDireita = "imagens/jogadores/Jogador1/Jogador_direita_1.png";
+        this.pontos = 0;
+
+        this.imagemBaixo = "imagens/jogadores/Jogador2/Jogador_baixo_1.png";
+        this.imagemCima = "imagens/jogadores/Jogador2/Jogador_cima_1.png";
+        this.imagemEsquerda = "imagens/jogadores/Jogador2/Jogador_esquerda_1.png";
+        this.imagemDireita = "imagens/jogadores/Jogador2/Jogador_direita_1.png";
 
         setImage(imagemBaixo);
     }
@@ -30,6 +35,14 @@ public class Jogador extends Actor {
     //METODOS
     public void act() {
         movimentar();
+        coletarMoedas();
+
+        if (sofrendoDano == true){
+            tempoDano--;
+            if (tempoDano == 0){
+                sofrendoDano = false;
+            }
+        }
     }
 
     public void movimentar(){
@@ -56,8 +69,25 @@ public class Jogador extends Actor {
     }
 
     public void coletarMoedas(){
-
+        //Quando o jogado encostar numa moeda. A moeda deve sumir e o jogador ganhar os pontos dela.
+        if(isTouching(Moeda.class)){
+            Moeda moedaEncontrada = (Moeda) getOneIntersectingObject(Moeda.class);
+            this.pontos = this.pontos + moedaEncontrada.valor;
+            getWorld().removeObject(moedaEncontrada);
+            System.out.println(this.pontos);
+        }
     }
 
+    public void sofrerDano(int dano){
 
+        if(this.vidas > dano && !sofrendoDano){
+            this.vidas = this.vidas - dano;
+            sofrendoDano = true;
+        }
+        else{
+            this.vidas = 0;
+        }
+
+        System.out.println("Vidas: " + this.vidas);
+    }
 }

@@ -12,22 +12,16 @@ public class Inimigo extends Actor {
     public Inimigo(){}
 
     public Inimigo(int velocidade, int dano){
-
-        int numero = Greenfoot.getRandomNumber(10);
-        if(numero<5){
-            this.direcao = +1;
-        }
-        else {
-            this.direcao = -1;
-        }
         this.velocidade = velocidade;
         this.dano = dano;
+        definirDirecaoInicial();
         setImage("imagens/inimigos/Monstro/Monstro_baixo_0.png");
     }
 
     //METODOS
     public void act(){
         movimentar();
+        atacar();
     }
 
     public void movimentar(){
@@ -38,7 +32,21 @@ public class Inimigo extends Actor {
     }
 
     public void atacar(){
+        //Quando o inimigo encostar no jogador. O inimigo deve fazer o jogar perder vida
+        if(isTouching(Jogador.class)){
+            Jogador jogadorEncontrado = (Jogador) getOneIntersectingObject(Jogador.class);
+            jogadorEncontrado.sofrerDano(this.dano);
+        }
+    }
 
+    public void definirDirecaoInicial(){
+        int numero = Greenfoot.getRandomNumber(10);
+        if(numero<5){
+            this.direcao = +1;
+        }
+        else {
+            this.direcao = -1;
+        }
     }
 
 }
